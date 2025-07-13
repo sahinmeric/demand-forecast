@@ -1,0 +1,6 @@
+sku,fecha,cantidad_vendida,precio,promocion_activa,categoria
+PROD001,2024-01-15,125,29.99,false,electronica
+PROD001,2024-01-16,143,29.99,true,electronica
+PROD002,2024-01-15,87,15.50,false,hogar
+PROD003,2024-01-15,234,8.99,false,consumo
+PROD004,2024-01-17,112,19.00,true,ropa
