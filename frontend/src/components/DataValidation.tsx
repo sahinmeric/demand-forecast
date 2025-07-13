@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
+import { getAccessToken } from '../auth';
 
 type Props = {
   preview: Record<string, any>[];
   mapping: Record<string, string>;
+  fileName: string;
 };
 
 type RowResult = {
@@ -10,11 +12,13 @@ type RowResult = {
   errors: string[];
 };
 
-export default function DataValidation({ preview, mapping }: Props) {
+export default function DataValidation({ preview, mapping, fileName }: Props) {
   const [validatedRows, setValidatedRows] = useState<RowResult[]>([]);
+  const [saving, setSaving] = useState(false);
+  const [saveMessage, setSaveMessage] = useState('');
 
   useEffect(() => {
-    const results = preview.map((rawRow, index) => {
+    const results = preview.map((rawRow) => {
       const row: Record<string, any> = {};
       const errors: string[] = [];
 
@@ -42,7 +46,11 @@ export default function DataValidation({ preview, mapping }: Props) {
       }
 
       const precio = parseFloat(row.precio);
-      if (isNaN(precio) || precio <= 0 || !/^\d+(\.\d{1,4})?$/.test(row.precio)) {
+      if (
+        isNaN(precio) ||
+        precio <= 0 ||
+        !/^\d+(\.\d{1,4})?$/.test(String(row.precio))
+      ) {
         errors.push('Invalid Precio');
       }
 
@@ -61,6 +69,33 @@ export default function DataValidation({ preview, mapping }: Props) {
 
   const validRows = validatedRows.filter((r) => r.errors.length === 0);
   const invalidRows = validatedRows.filter((r) => r.errors.length > 0);
+
+  const handleSave = async () => {
+    setSaving(true);
+    setSaveMessage('');
+    try {
+      const token = getAccessToken();
+      const res = await fetch('http://localhost:3000/api/files/save', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          fileName,
+          rows: validRows.map((r) => r.row),
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      setSaveMessage(`✅ ${data.message}`);
+    } catch (err: any) {
+      setSaveMessage(`❌ Save failed: ${err.message}`);
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div>
@@ -116,6 +151,13 @@ export default function DataValidation({ preview, mapping }: Props) {
               ))}
             </tbody>
           </table>
+
+          <div style={{ marginTop: '1rem' }}>
+            <button onClick={handleSave} disabled={saving}>
+              {saving ? 'Saving...' : 'Save Valid Rows to Database'}
+            </button>
+            {saveMessage && <p>{saveMessage}</p>}
+          </div>
         </>
       )}
     </div>

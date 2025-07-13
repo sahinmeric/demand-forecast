@@ -19,7 +19,7 @@ export default function UploadPage() {
       )}
 
       {mapping && (
-        <DataValidation preview={preview.preview} mapping={mapping} />
+        <DataValidation preview={preview.preview} mapping={mapping} fileName={preview.name} />
       )}
     </div>
   );
