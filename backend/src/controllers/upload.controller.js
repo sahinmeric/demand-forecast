@@ -1,6 +1,9 @@
 const xlsx = require('xlsx');
 const csv = require('csv-parser');
 const { Readable } = require('stream');
+const { PrismaClient } = require('@prisma/client');
+
+const prisma = new PrismaClient();
 
 const uploadFile = async (req, res) => {
   try {
@@ -36,4 +39,40 @@ const uploadFile = async (req, res) => {
   }
 };
 
-module.exports = { uploadFile };
+const saveData = async (req, res) => {
+  try {
+    const userId = req.user.userId; // from auth middleware
+    const rows = req.body.rows;
+    const fileName = req.body.fileName || 'uploaded_file.csv';
+
+    if (!Array.isArray(rows) || rows.length === 0) {
+      return res.status(400).json({ message: 'No rows to save' });
+    }
+
+    const dataToInsert = rows.map((row) => ({
+      userId,
+      sku: row.sku,
+      date: new Date(row.fecha),
+      quantity: parseInt(row.cantidad_vendida, 10),
+      price: parseFloat(row.precio),
+      promotion: row.promocion_activa === true,
+      category: row.categoria,
+      fileName,
+      dataVersion: 1,
+    }));
+
+    await prisma.salesData.createMany({
+      data: dataToInsert,
+    });
+
+    res.status(201).json({ message: `Saved ${dataToInsert.length} rows.` });
+  } catch (error) {
+    console.error('Save error:', error);
+    res.status(500).json({ message: 'Failed to save data' });
+  }
+};
+
+module.exports = {
+  uploadFile,
+  saveData,
+};

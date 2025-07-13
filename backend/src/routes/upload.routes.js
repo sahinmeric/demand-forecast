@@ -1,7 +1,8 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
 const uploadController = require('../controllers/upload.controller');
-const multer = require('multer');
+const authMiddleware = require('../middleware/authMiddleware');
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -10,5 +11,6 @@ const upload = multer({
 });
 
 router.post('/upload', upload.single('file'), uploadController.uploadFile);
+router.post('/save', authMiddleware, uploadController.saveData);
 
 module.exports = router;
