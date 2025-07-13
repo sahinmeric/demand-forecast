@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { PrismaClient } = require('@prisma/client');
+const { generateAccessToken, generateRefreshToken } = require('../services/token.service');
 
 const prisma = new PrismaClient();
 
@@ -59,8 +60,11 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password.' });
     }
 
-    // We'll generate JWT in the next step
-    return res.status(200).json({ message: 'Login successful (JWT coming next)' });
+    return res.status(200).json({
+      message: 'Login successful',
+      accessToken: generateAccessToken(user),
+      refreshToken: generateRefreshToken(user),
+    });
 
   } catch (error) {
     console.error('Login error:', error);
