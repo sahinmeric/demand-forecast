@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import FileUpload from '../components/FileUpload';
 import FieldMapping from '../components/FieldMapping';
+import DataValidation from '../components/DataValidation';
+
 
 export default function UploadPage() {
   const [preview, setPreview] = useState<any | null>(null);
@@ -17,10 +19,7 @@ export default function UploadPage() {
       )}
 
       {mapping && (
-        <div>
-          <h3>✅ Mapping Complete</h3>
-          <pre>{JSON.stringify(mapping, null, 2)}</pre>
-        </div>
+        <DataValidation preview={preview.preview} mapping={mapping} />
       )}
     </div>
   );
