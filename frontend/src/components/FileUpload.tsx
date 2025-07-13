@@ -6,7 +6,11 @@ type UploadPreview = {
   preview: Record<string, any>[];
 };
 
-export default function FileUpload() {
+type Props = {
+  onUploadComplete: (data: any) => void;
+};
+
+export default function FileUpload({ onUploadComplete }: Props) {
   const [preview, setPreview] = useState<UploadPreview | null>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -30,7 +34,7 @@ export default function FileUpload() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
 
-      setPreview(data);
+      onUploadComplete(data);
     } catch (err: any) {
       setError(err.message || 'Upload failed');
     } finally {
