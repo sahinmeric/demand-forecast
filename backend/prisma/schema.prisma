@@ -21,6 +21,7 @@ model User {
   createdAt   DateTime @default(now())
   lastLogin   DateTime?
   salesData   SalesData[]
+  forecasts Forecast[]
 }
 
 model SalesData {
@@ -36,4 +37,21 @@ model SalesData {
   uploadedAt   DateTime @default(now())
   fileName     String
   dataVersion  Int      @default(1)
+}
+
+model Forecast {
+  id              Int      @id @default(autoincrement())
+  user            User     @relation(fields: [userId], references: [id])
+  userId          Int
+  sku             String
+  forecastDate    DateTime
+  baseValue       Int
+  upperBound      Int
+  lowerBound      Int
+  confidenceLevel Float
+  seasonalFactor  Float
+  trendComponent  Float
+  generatedAt     DateTime @default(now())
+  modelVersion    String
+  dataQualityScore Float
 }
