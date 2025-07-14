@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getAccessToken } from '../auth';
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Area, AreaChart,
-} from 'recharts';
+import { Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Area, AreaChart} from 'recharts';
 
 type CombinedRow = {
   date: string;

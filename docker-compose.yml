@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: forecast_user
+      POSTGRES_PASSWORD: forecast_pass
+      POSTGRES_DB: forecastdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://forecast_user:forecast_pass@postgres:5432/forecastdb
+      JWT_SECRET: your-secret
+      REFRESH_SECRET: your-refresh
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    command: npm run dev
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    ports:
+      - "5173:5173"
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: npm run dev
+
+volumes:
+  pgdata:

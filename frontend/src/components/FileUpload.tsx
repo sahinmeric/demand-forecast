@@ -35,6 +35,7 @@ export default function FileUpload({ onUploadComplete }: Props) {
       if (!res.ok) throw new Error(data.message);
 
       onUploadComplete(data);
+      setPreview(data);
     } catch (err: any) {
       setError(err.message || 'Upload failed');
     } finally {
