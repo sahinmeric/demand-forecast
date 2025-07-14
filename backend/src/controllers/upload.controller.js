@@ -88,8 +88,23 @@ const getSalesData = async (req, res) => {
   }
 };
 
+const getSalesDataBySKU = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const sku = req.params.sku;
+    const data = await prisma.salesData.findMany({
+      where: { userId, sku },
+      orderBy: { date: 'asc' },
+    });
+    res.json({ records: data });
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching sales data' });
+  }
+};
+
 module.exports = {
   uploadFile,
   saveData,
   getSalesData,
+  getSalesDataBySKU,
 };

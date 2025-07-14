@@ -7,10 +7,7 @@ const generateForecasts = async (req, res) => {
     const horizon = 3; // months to forecast
 
     const recentSales = await prisma.salesData.findMany({
-      where: {
-        userId,
-        date: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }, // last 30 days
-      },
+      where: { userId },
     });
 
     if (recentSales.length === 0) {
@@ -77,4 +74,38 @@ function randomFloat(min, max) {
   return +(Math.random() * (max - min) + min).toFixed(2);
 }
 
-module.exports = { generateForecasts };
+const getForecasts = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const forecasts = await prisma.forecast.findMany({
+      where: { userId },
+      orderBy: { forecastDate: 'asc' },
+    });
+
+    res.status(200).json({ forecasts });
+  } catch (err) {
+    console.error('Fetch forecasts error:', err);
+    res.status(500).json({ message: 'Failed to load forecasts' });
+  }
+};
+
+const getForecastsBySKU = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const sku = req.params.sku;
+    const forecasts = await prisma.forecast.findMany({
+      where: { userId, sku },
+      orderBy: { forecastDate: 'asc' },
+    });
+    res.json({ forecasts });
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching forecast data' });
+  }
+};
+
+
+module.exports = {
+  generateForecasts,
+  getForecasts,
+  getForecastsBySKU,
+};

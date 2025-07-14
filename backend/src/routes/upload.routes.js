@@ -13,5 +13,6 @@ const upload = multer({
 router.post('/upload', upload.single('file'), uploadController.uploadFile);
 router.post('/save', authMiddleware, uploadController.saveData);
 router.get('/sales-data', authMiddleware, uploadController.getSalesData);
+router.get('/sales-data/:sku', authMiddleware, uploadController.getSalesDataBySKU);
 
 module.exports = router;
