@@ -72,7 +72,24 @@ const saveData = async (req, res) => {
   }
 };
 
+const getSalesData = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    const records = await prisma.salesData.findMany({
+      where: { userId },
+      orderBy: { uploadedAt: 'desc' },
+    });
+
+    res.status(200).json({ records });
+  } catch (err) {
+    console.error('Fetch sales data error:', err);
+    res.status(500).json({ message: 'Failed to fetch data' });
+  }
+};
+
 module.exports = {
   uploadFile,
   saveData,
+  getSalesData,
 };
