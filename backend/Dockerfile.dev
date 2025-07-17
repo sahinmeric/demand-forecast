@@ -12,5 +12,5 @@ COPY backend/.env .env
 # Generate Prisma client before container runs
 RUN npx prisma generate
 
-CMD ["sh", "-c", "npx prisma db push && npm run dev"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node src/index.js"]
 
