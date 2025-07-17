@@ -98,7 +98,7 @@ const HomePage: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid item xs={6}>
+            <Grid>
               <Button
                 fullWidth
                 variant="contained"
@@ -108,7 +108,7 @@ const HomePage: React.FC = () => {
                 {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
               </Button>
             </Grid>
-            <Grid item xs={6}>
+            <Grid>
               <Button
                 fullWidth
                 variant="contained"
