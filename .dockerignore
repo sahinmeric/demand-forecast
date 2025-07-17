@@ -1,0 +1,21 @@
+# Ignore dependencies and cache
+node_modules
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Ignore Docker-related files (if not needed in image context)
+Dockerfile
+Dockerfile.dev
+.dockerignore
+docker-compose.yml
+docker-compose.dev.yml
+docker-compose.prod.yml
+
+# Ignore frontend and backend build artifacts (optional, if build output is large or local-only)
+frontend/dist
+backend/dist
+
+# Ignore env files if you're not copying them in the Dockerfile (security)
+.env
+.env.local
