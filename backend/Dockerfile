@@ -1,11 +1,11 @@
-# --- Production build ---
-FROM node:20 AS backend
+FROM node:20-alpine
 
 WORKDIR /app
 
 COPY backend/package*.json ./
-RUN npm install --only=production
+RUN npm install --omit=dev
 
-COPY backend .
+COPY backend ./
+RUN npx prisma generate
 
-CMD ["npm", "run", "start"]
+CMD ["node", "src/index.js"]
