@@ -1,0 +1,16 @@
+# backend/Dockerfile
+FROM node:18
+
+WORKDIR /app
+COPY backend/package*.json ./
+RUN npm install
+COPY backend/. .
+
+# Ensure .env is copied
+COPY backend/.env .env
+
+# Generate Prisma client before container runs
+RUN npx prisma generate
+
+CMD ["sh", "-c", "npx prisma db push && npm run dev"]
+
