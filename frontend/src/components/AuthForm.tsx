@@ -32,8 +32,12 @@ export default function AuthForm({ mode }: Props) {
       } else {
         setSuccess('Registered successfully! Now you can log in.');
       }
-    } catch (err: any) {
-      setError(err.message || 'Something went wrong');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Something went wrong');
+      } else {
+        setError('Something went wrong');
+      }
     }
   };
 
