@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:15
+    ports: ["5432:5432"]
+    environment:
+      POSTGRES_USER: forecast_user
+      POSTGRES_PASSWORD: forecast_pass
+      POSTGRES_DB: forecastdb
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    env_file:
+      - backend/.env.dev
+    depends_on:
+      - postgres
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile.dev
+    ports:
+      - "80:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      VITE_API_URL: http://localhost:3000
+
+
+volumes:
+  pgdata:
