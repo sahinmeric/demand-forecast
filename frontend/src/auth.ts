@@ -15,3 +15,7 @@ export const logout = () => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
 };
+
+export const isAuthenticated = (): boolean => {
+  return !!localStorage.getItem('accessToken');
+};
