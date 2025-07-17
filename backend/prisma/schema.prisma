@@ -22,7 +22,8 @@ model User {
   createdAt   DateTime @default(now())
   lastLogin   DateTime?
   salesData   SalesData[]
-  forecasts Forecast[]
+  forecasts   Forecast[]
+  configuration Configuration?
 }
 
 model SalesData {
@@ -55,4 +56,15 @@ model Forecast {
   generatedAt     DateTime @default(now())
   modelVersion    String
   dataQualityScore Float
+}
+
+model Configuration {
+  id                   Int      @id @default(autoincrement())
+  user                 User     @relation(fields: [userId], references: [id])
+  userId               Int      @unique
+
+  confidenceLevel      Float
+  forecastHorizon      Int
+  alertThresholds      Json
+  notificationSettings Json
 }
