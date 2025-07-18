@@ -15,7 +15,7 @@ function App() {
     <>
       <Navigation />
       <Routes>
-        <Route path="/" element={isAuthenticated() ? <Navigate to="/dashboard" /> : <HomePage />} />
+        <Route path="/" element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <HomePage />} />
         <Route path="/login" element={<AuthForm mode="login" />} />
       <Route path="/register" element={<AuthForm mode="register" />} />
       <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
