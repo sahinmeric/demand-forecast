@@ -14,21 +14,17 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useSalesData } from "../hooks/useSalesData";
+import { filterSalesRows } from "../utils/filterSalesData";
+
 export default function SalesTablePage() {
   const [skuFilter, setSkuFilter] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const { rows, error, loading } = useSalesData();
-
-  const filtered = rows.filter((r) => {
-    const matchesSKU =
-      skuFilter === "" || r.sku.toLowerCase().includes(skuFilter.toLowerCase());
-    const rowDate = new Date(r.date);
-    const from = fromDate ? new Date(fromDate) : null;
-    const to = toDate ? new Date(toDate) : null;
-    const matchesFrom = !from || rowDate >= from;
-    const matchesTo = !to || rowDate <= to;
-    return matchesSKU && matchesFrom && matchesTo;
+  const filtered = filterSalesRows(rows, {
+    sku: skuFilter,
+    fromDate,
+    toDate,
   });
 
   return (
