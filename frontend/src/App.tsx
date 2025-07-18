@@ -1,5 +1,4 @@
 import { Routes, Route, Navigate} from 'react-router-dom';
-import AuthForm from './components/AuthForm';
 import DashboardPage from './pages/DashboardPage';
 import UploadPage from './pages/UploadPage';
 import SalesTablePage from './pages/SalesTablePage';
@@ -10,7 +9,7 @@ import Navigation from './components/Navigation';
 import PrivateRoute from './components/PrivateRoute';
 import { isAuthenticated } from './auth';
 import RegisterPage from './pages/RegisterPage';
-
+import LoginPage from "./pages/LoginPage";
 
 function App() {
   return (
@@ -18,13 +17,13 @@ function App() {
       <Navigation />
       <Routes>
         <Route path="/" element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <HomePage />} />
-        <Route path="/login" element={<AuthForm mode="login" />} />
-      <Route path="/register" element={<RegisterPage />} />
-      <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
-      <Route path="/upload" element={<PrivateRoute><UploadPage /></PrivateRoute>} />
-      <Route path="/sales" element={<PrivateRoute><SalesTablePage /></PrivateRoute>} />
-      <Route path="/forecast" element={<PrivateRoute><ForecastPage /></PrivateRoute>} />
-      <Route path="/charts" element={<PrivateRoute><ForecastChartPage /></PrivateRoute>} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+        <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
+        <Route path="/upload" element={<PrivateRoute><UploadPage /></PrivateRoute>} />
+        <Route path="/sales" element={<PrivateRoute><SalesTablePage /></PrivateRoute>} />
+        <Route path="/forecast" element={<PrivateRoute><ForecastPage /></PrivateRoute>} />
+        <Route path="/charts" element={<PrivateRoute><ForecastChartPage /></PrivateRoute>} />
     </Routes>
     </>
   );
