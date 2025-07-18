@@ -8,49 +8,18 @@ import {
   Paper,
   Grid,
   CircularProgress,
-  Snackbar,
-  Alert,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import useSnackbar from "../hooks/useSnackbar";
 import { isValidEmail, isValidPassword } from "../utils/validation";
+import { useRegister } from "../hooks/useRegister";
 
 
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
-  const {
-    open: snackbarOpen,
-    message: snackbarMessage,
-    severity: snackbarSeverity,
-    showSnackbar,
-    handleClose: handleSnackbarClose,
-  } = useSnackbar();
+  const { register, loading } = useRegister();
 
-  const handleRegister = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Registration failed");
-      }
-
-      await response.json();
-      showSnackbar("Registration successful! Please log in.", "success");
-      setTimeout(() => navigate("/login"), 2000);
-    } catch (err) {
-      showSnackbar(`Registration failed.${err instanceof Error ? ` ${err.message}` : ""}`, "error");
-    } finally {
-      setLoading(false);
-    }
+  const handleSubmit = () => {
+    register(email, password);
   };
 
   return (
@@ -100,7 +69,7 @@ const RegisterPage: React.FC = () => {
               <Button
                 fullWidth
                 variant="contained"
-                onClick={handleRegister}
+                onClick={handleSubmit}
                 disabled={loading || !isValidEmail(email) || !isValidPassword(password)}
               >
                 {loading ? <CircularProgress color="inherit" /> : "Register"}
@@ -109,16 +78,6 @@ const RegisterPage: React.FC = () => {
           </Grid>
         </Box>
       </Paper>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        onClose={handleSnackbarClose}
-      >
-        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: "100%" }}>
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </Container>
   );
 };
