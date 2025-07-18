@@ -12,7 +12,6 @@ import {
   Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { saveTokens } from "../auth";
 import useSnackbar from "../hooks/useSnackbar";
 
 const RegisterPage: React.FC = () => {
@@ -42,11 +41,9 @@ const RegisterPage: React.FC = () => {
         throw new Error(errorData.message || "Registration failed");
       }
 
-      const data = await response.json();
-      saveTokens(data.accessToken, data.refreshToken);
-      showSnackbar("Registration successful!", "success");
-
-      setTimeout(() => navigate("/dashboard"), 1000);
+      await response.json();
+      showSnackbar("Registration successful! Please log in.", "success");
+      setTimeout(() => navigate("/login"), 1000);
     } catch (err) {
       showSnackbar(`Registration failed.${err instanceof Error ? ` ${err.message}` : ""}`, "error");
     } finally {
