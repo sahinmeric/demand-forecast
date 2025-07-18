@@ -99,28 +99,28 @@ const HomePage: React.FC = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={handleLogin}
+            disabled={loading}
+            sx={{ mt: 2 }}
+          >
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
+          </Button>
+
+          <Grid container justifyContent="center" sx={{ mt: 2 }}>
+            <Typography variant="body2">
+              Don’t have an account?{" "}
               <Button
-                fullWidth
-                variant="contained"
-                onClick={handleLogin}
-                disabled={loading}
-              >
-                {loading ? <CircularProgress size={24} color="inherit" /> : "Login"}
-              </Button>
-            </Grid>
-            <Grid>
-              <Button
-                fullWidth
-                variant="contained"
-                color="secondary"
                 onClick={handleRegister}
-                disabled={loading}
+                size="small"
+                color="secondary"
+                sx={{ textTransform: "none", p: 0, minWidth: "auto" }}
               >
-                Register
+                Register here
               </Button>
-            </Grid>
+            </Typography>
           </Grid>
         </Box>
       </Paper>
