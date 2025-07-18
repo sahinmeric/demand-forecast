@@ -47,8 +47,10 @@ const HomePage: React.FC = () => {
       const data = await response.json();
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
-
-      navigate("/dashboard");
+      showSnackbar("Logged in successfully!", "success");
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
     } catch (error) {
       console.error("Login failed:", error);
       showSnackbar("Invalid email or password.", "error");
