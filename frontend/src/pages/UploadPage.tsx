@@ -1,12 +1,26 @@
 import { useState } from "react";
 import FileUpload from "../components/FileUpload";
 import FieldMapping from "../components/FieldMapping";
-import DataValidation from "../components/DataValidation";
-import type { UploadPreview, FieldMapping as MappingType } from "../types";
+import DataValidationTable from "../components/DataValidationTable";
+import type { UploadPreview } from "../types";
+import { useSaveCleanData } from "../hooks/useSaveCleanData";
 
 export default function UploadPage() {
   const [preview, setPreview] = useState<UploadPreview | null>(null);
-  const [mapping, setMapping] = useState<MappingType | null>(null);
+  const [mapping, setMapping] = useState<Record<string, string> | null>(null);
+  const [saved, setSaved] = useState(false);
+
+  const { saveToDatabase, saving, message } = useSaveCleanData();
+
+  const handleSave = async (
+    validRows: Record<string, unknown>[],
+    fileName: string
+  ) => {
+    const result = await saveToDatabase(validRows, fileName);
+    if (result.success) {
+      setSaved(true);
+    }
+  };
 
   return (
     <div>
@@ -21,13 +35,18 @@ export default function UploadPage() {
         />
       )}
 
-      {mapping && (
-        <DataValidation
-          preview={preview?.preview || []}
+      {preview && mapping && !saved && (
+        <DataValidationTable
+          data={preview.preview}
           mapping={mapping}
-          fileName={preview?.name || "Uploaded File"}
+          fileName={preview.name}
+          onSave={handleSave}
+          saving={saving}
+          message={message}
         />
       )}
+
+      {saved && <p>🎉 Data is validated and saved successfully!</p>}
     </div>
   );
 }
