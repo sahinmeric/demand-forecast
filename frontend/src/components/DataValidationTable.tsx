@@ -8,6 +8,8 @@ import {
   TextField,
   Button,
   Typography,
+  CircularProgress,
+  Alert,
 } from "@mui/material";
 import { validators } from "../utils/validationRules";
 import type { PreviewRow } from "../types";
@@ -15,10 +17,20 @@ import type { PreviewRow } from "../types";
 type Props = {
   data: PreviewRow[];
   mapping: Record<string, string>;
-  onSave: (cleanData: PreviewRow[]) => void;
+  fileName: string;
+  onSave: (cleanData: PreviewRow[], fileName: string) => void;
+  saving: boolean;
+  message: string;
 };
 
-export default function DataValidationTable({ data, mapping, onSave }: Props) {
+export default function DataValidationTable({
+  data,
+  mapping,
+  fileName,
+  onSave,
+  saving,
+  message,
+}: Props) {
   const [rows, setRows] = useState<PreviewRow[]>(data);
   const [errors, setErrors] = useState<boolean[][]>([]);
 
@@ -91,12 +103,25 @@ export default function DataValidationTable({ data, mapping, onSave }: Props) {
       <Button
         variant="contained"
         color="primary"
-        disabled={!isValid}
+        disabled={!isValid || saving}
         sx={{ mt: 2 }}
-        onClick={() => onSave(rows)}
+        onClick={() => onSave(rows, fileName)}
       >
-        Save to database
+        {saving ? (
+          <CircularProgress size={22} color="inherit" />
+        ) : (
+          "Save to database"
+        )}
       </Button>
+
+      {message && (
+        <Alert
+          severity={message.startsWith("✅") ? "success" : "error"}
+          sx={{ mt: 2 }}
+        >
+          {message}
+        </Alert>
+      )}
     </>
   );
 }
