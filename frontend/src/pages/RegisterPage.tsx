@@ -8,6 +8,8 @@ import {
   Paper,
   Grid,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { saveTokens } from "../auth";
@@ -18,7 +20,13 @@ const RegisterPage: React.FC = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { showSnackbar } = useSnackbar();
+  const {
+    open: snackbarOpen,
+    message: snackbarMessage,
+    severity: snackbarSeverity,
+    showSnackbar,
+    handleClose: handleSnackbarClose,
+  } = useSnackbar();
 
   const handleRegister = async () => {
     setLoading(true);
@@ -30,7 +38,8 @@ const RegisterPage: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Registration failed");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed");
       }
 
       const data = await response.json();
@@ -39,8 +48,7 @@ const RegisterPage: React.FC = () => {
 
       setTimeout(() => navigate("/dashboard"), 1000);
     } catch (err) {
-      console.error("Register error:", err);
-      showSnackbar("Registration failed. Email might already be in use.", "error");
+      showSnackbar(`Registration failed.${err instanceof Error ? ` ${err.message}` : ""}`, "error");
     } finally {
       setLoading(false);
     }
@@ -83,7 +91,7 @@ const RegisterPage: React.FC = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Grid container spacing={2} sx={{ mt: 2 }}>
-            <Grid item xs={12}>
+            <Grid>
               <Button
                 fullWidth
                 variant="contained"
@@ -96,9 +104,16 @@ const RegisterPage: React.FC = () => {
           </Grid>
         </Box>
       </Paper>
-
-      {/* Snackbar from custom hook */}
-      {/* {SnackbarComponent} */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={6000}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: "100%" }}>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
     </Container>
   );
 };
