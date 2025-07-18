@@ -12,7 +12,6 @@ import {
 import { isValidEmail, isValidPassword } from "../utils/validation";
 import { useRegister } from "../hooks/useRegister";
 
-
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -70,7 +69,9 @@ const RegisterPage: React.FC = () => {
                 fullWidth
                 variant="contained"
                 onClick={handleSubmit}
-                disabled={loading || !isValidEmail(email) || !isValidPassword(password)}
+                disabled={
+                  loading || !isValidEmail(email) || !isValidPassword(password)
+                }
               >
                 {loading ? <CircularProgress color="inherit" /> : "Register"}
               </Button>
