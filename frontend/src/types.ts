@@ -20,3 +20,9 @@ export type SalesRow = {
   fileName: string;
   uploadedAt: string;
 };
+
+export type Filters = {
+  sku?: string;
+  fromDate?: string;
+  toDate?: string;
+};
