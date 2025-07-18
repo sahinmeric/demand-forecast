@@ -4,6 +4,7 @@ import FieldMapping from "../components/FieldMapping";
 import DataValidationTable from "../components/DataValidationTable";
 import type { UploadPreview } from "../types";
 import { useSaveCleanData } from "../hooks/useSaveCleanData";
+import { Container } from "@mui/material";
 
 export default function UploadPage() {
   const [preview, setPreview] = useState<UploadPreview | null>(null);
@@ -23,7 +24,7 @@ export default function UploadPage() {
   };
 
   return (
-    <div>
+    <Container sx={{ mt: 4 }}>
       <h2>Upload Data Wizard</h2>
 
       {!preview && <FileUpload onUploadComplete={setPreview} />}
@@ -47,6 +48,6 @@ export default function UploadPage() {
       )}
 
       {saved && <p>🎉 Data is validated and saved successfully!</p>}
-    </div>
+    </Container>
   );
 }
