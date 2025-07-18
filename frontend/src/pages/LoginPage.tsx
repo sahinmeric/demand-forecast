@@ -7,6 +7,7 @@ import {
   TextField,
   Button,
   CircularProgress,
+  Grid,
 } from "@mui/material";
 import { useLogin } from "../hooks/useLogin";
 import { isValidEmail, isValidPassword } from "../utils/validation";
@@ -66,17 +67,32 @@ const LoginPage: React.FC = () => {
                 : ""
             }
           />
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 2 }}
-            onClick={handleSubmit}
-            disabled={
-              loading || !isValidEmail(email) || !isValidPassword(password)
-            }
-          >
-            {loading ? <CircularProgress size={24} /> : "Login"}
-          </Button>
+          <Grid container flexDirection={"column"}>
+            <Grid>
+              <Button
+                fullWidth
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={handleSubmit}
+                disabled={
+                  loading || !isValidEmail(email) || !isValidPassword(password)
+                }
+              >
+                {loading ? <CircularProgress size={24} /> : "Login"}
+              </Button>
+            </Grid>
+            <Grid>
+              <Button
+                fullWidth
+                variant="outlined"
+                sx={{ mt: 2 }}
+                onClick={() => window.history.back()}
+                disabled={loading}
+              >
+                Back
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
       </Paper>
     </Container>

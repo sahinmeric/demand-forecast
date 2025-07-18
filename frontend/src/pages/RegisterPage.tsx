@@ -92,7 +92,12 @@ const RegisterPage: React.FC = () => {
                 : ""
             }
           />
-          <Grid container spacing={2} sx={{ mt: 2 }}>
+          <Grid
+            container
+            spacing={2}
+            justifyContent="space-between"
+            sx={{ mt: 2 }}
+          >
             <Grid>
               <Button
                 fullWidth
@@ -105,6 +110,16 @@ const RegisterPage: React.FC = () => {
                 ) : (
                   "Register"
                 )}
+              </Button>
+            </Grid>
+            <Grid>
+              <Button
+                fullWidth
+                variant="outlined"
+                onClick={() => window.history.back()}
+                disabled={loading}
+              >
+                Back
               </Button>
             </Grid>
           </Grid>
