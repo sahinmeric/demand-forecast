@@ -14,10 +14,6 @@ export default function DashboardPage() {
   return (
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Paper elevation={4} sx={{ p: 4, textAlign: "center" }}>
-        <Typography variant="h5" gutterBottom>
-          Dashboard
-        </Typography>
-
         {loading ? (
           <CircularProgress />
         ) : error ? (
