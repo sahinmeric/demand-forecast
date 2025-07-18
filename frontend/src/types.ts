@@ -1,6 +1,8 @@
+export type PreviewRow = Record<string, string>;
+
 export type UploadPreview = {
   name: string;
-  preview: string[][];
+  preview: PreviewRow[];
 };
 
 export type FieldMapping = {
