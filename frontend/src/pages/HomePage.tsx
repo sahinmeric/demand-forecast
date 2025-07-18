@@ -12,14 +12,20 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import useSnackbar from "../hooks/useSnackbar";
+
 
 const HomePage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+  const {
+  open: snackbarOpen,
+  message: snackbarMessage,
+  severity: snackbarSeverity,
+  showSnackbar,
+  handleClose: handleSnackbarClose,
+} = useSnackbar();
 
   const navigate = useNavigate();
 
@@ -45,9 +51,7 @@ const HomePage: React.FC = () => {
       navigate("/dashboard");
     } catch (error) {
       console.error("Login failed:", error);
-      setSnackbarSeverity("error");
-      setSnackbarMessage("Invalid email or password.");
-      setSnackbarOpen(true);
+      showSnackbar("Invalid email or password.", "error");
     } finally {
       setLoading(false);
     }
@@ -55,10 +59,6 @@ const HomePage: React.FC = () => {
 
   const handleRegister = () => {
     navigate("/register");
-  };
-
-  const handleSnackbarClose = () => {
-    setSnackbarOpen(false);
   };
 
   return (
@@ -123,7 +123,10 @@ const HomePage: React.FC = () => {
         </Box>
       </Paper>
 
-      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+      <Snackbar 
+      open={snackbarOpen} 
+      anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      autoHideDuration={6000} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: "100%" }}>
           {snackbarMessage}
         </Alert>
