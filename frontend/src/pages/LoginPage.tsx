@@ -36,10 +36,11 @@ const LoginPage: React.FC = () => {
         <Box component="form" sx={{ mt: 2 }}>
           <TextField
             fullWidth
+            required
             label="Email Address"
             margin="normal"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value.toLowerCase())}
             autoComplete="email"
             autoFocus
             error={!!email && !isValidEmail(email)}
@@ -51,12 +52,19 @@ const LoginPage: React.FC = () => {
           />
           <TextField
             fullWidth
+            required
             label="Password"
             type="password"
             margin="normal"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={!!password && !isValidPassword(password)}
             autoComplete="current-password"
+            helperText={
+              password && !isValidPassword(password)
+                ? "Password must be at least 6 characters."
+                : ""
+            }
           />
           <Button
             fullWidth
