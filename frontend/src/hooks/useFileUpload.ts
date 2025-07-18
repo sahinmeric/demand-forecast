@@ -41,13 +41,15 @@ export const useFileUpload = (
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
 
-        onUploadComplete(data);
-        setPreview(data);
+        setTimeout(() => {
+          onUploadComplete(data);
+          setPreview(data);
+          setLoading(false);
+        }, 2000);
       } catch (err) {
         const message =
           err instanceof Error ? err.message : "Unexpected upload error.";
         setError(message);
-      } finally {
         setLoading(false);
       }
     },
