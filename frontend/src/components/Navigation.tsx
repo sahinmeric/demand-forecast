@@ -1,18 +1,15 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
-import { useNavigate, useLocation } from 'react-router-dom';
-import LogoutIcon from '@mui/icons-material/Logout';
-import { logout, isAuthenticated } from '../auth';
+import React from "react";
+import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import LogoutIcon from "@mui/icons-material/Logout";
+import { logout, isAuthenticated } from "../auth";
 
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleLogout = () => {
     logout();
-    if (location.pathname !== "/") {
-      navigate("/", { replace: true });
-    }
+    navigate("/", { replace: true });
   };
 
   if (!isAuthenticated()) return null;
@@ -23,19 +20,19 @@ const Navigation: React.FC = () => {
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
           Demand Forecast
         </Typography>
-        <Button color="inherit" onClick={() => navigate('/dashboard')}>
+        <Button color="inherit" onClick={() => navigate("/dashboard")}>
           Dashboard
         </Button>
-        <Button color="inherit" onClick={() => navigate('/upload')}>
+        <Button color="inherit" onClick={() => navigate("/upload")}>
           Upload
         </Button>
-        <Button color="inherit" onClick={() => navigate('/sales')}>
+        <Button color="inherit" onClick={() => navigate("/sales")}>
           Sales
         </Button>
-        <Button color="inherit" onClick={() => navigate('/forecast')}>
+        <Button color="inherit" onClick={() => navigate("/forecast")}>
           Forecasts
         </Button>
-        <Button color="inherit" onClick={() => navigate('/charts')}>
+        <Button color="inherit" onClick={() => navigate("/charts")}>
           Charts
         </Button>
         <IconButton onClick={handleLogout}>
