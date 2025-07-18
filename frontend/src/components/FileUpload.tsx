@@ -1,103 +1,85 @@
-import { useState, useCallback } from 'react';
-import { useDropzone } from 'react-dropzone';
-
-type UploadPreview = {
-  name: string;
-  preview: Record<string, any>[];
-};
+import {
+  Box,
+  Typography,
+  Paper,
+  CircularProgress,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Alert,
+} from "@mui/material";
+import type { UploadPreview } from "../types";
+import { useFileUpload } from "../hooks/useFileUpload";
 
 type Props = {
-  onUploadComplete: (data: any) => void;
+  onUploadComplete: (data: UploadPreview) => void;
 };
 
 export default function FileUpload({ onUploadComplete }: Props) {
-  const [preview, setPreview] = useState<UploadPreview | null>(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    if (acceptedFiles.length === 0) return;
-
-    const file = acceptedFiles[0];
-    setError('');
-    setLoading(true);
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const res = await fetch('http://localhost:3000/api/files/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message);
-
-      onUploadComplete(data);
-      setPreview(data);
-    } catch (err: any) {
-      setError(err.message || 'Upload failed');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop,
-    accept: {
-      'text/csv': ['.csv'],
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
-    },
-    maxFiles: 1,
-    maxSize: 10 * 1024 * 1024, // 10MB
-  });
+  const { getRootProps, getInputProps, isDragActive, preview, loading, error } =
+    useFileUpload(onUploadComplete);
 
   return (
-    <div>
-      <div
+    <Box>
+      <Paper
+        variant="outlined"
         {...getRootProps()}
-        style={{
-          border: '2px dashed #aaa',
-          padding: 20,
-          textAlign: 'center',
-          marginBottom: 20,
+        sx={{
+          border: "2px dashed #aaa",
+          padding: 3,
+          textAlign: "center",
+          mb: 3,
+          cursor: "pointer",
         }}
       >
         <input {...getInputProps()} />
-        {isDragActive ? (
-          <p>Drop the file here ...</p>
-        ) : (
-          <p>Drag & drop a CSV or XLSX file here, or click to select</p>
-        )}
-      </div>
+        <Typography>
+          {isDragActive
+            ? "Drop the file here..."
+            : "Drag & drop a CSV/XLSX file here, or click to select"}
+        </Typography>
+      </Paper>
 
-      {loading && <p>Uploading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {loading && (
+        <CircularProgress sx={{ display: "block", mx: "auto", mb: 2 }} />
+      )}
+
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
       {preview && (
-        <div>
-          <h3>Preview of: {preview.name}</h3>
-          <table border={1} cellPadding={8}>
-            <thead>
-              <tr>
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Preview: {preview.name}
+          </Typography>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
                 {Object.keys(preview.preview[0]).map((key) => (
-                  <th key={key}>{key}</th>
+                  <TableCell key={key}>{key}</TableCell>
                 ))}
-              </tr>
-            </thead>
-            <tbody>
-              {preview.preview.map((row, idx) => (
-                <tr key={idx}>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {preview.preview.slice(0, 5).map((row, idx) => (
+                <TableRow key={idx}>
                   {Object.values(row).map((val, i) => (
-                    <td key={i}>{String(val)}</td>
+                    <TableCell key={i}>{String(val)}</TableCell>
                   ))}
-                </tr>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
+            </TableBody>
+          </Table>
+          <Typography variant="caption" color="text.secondary">
+            Showing first 5 rows for preview
+          </Typography>
+        </Box>
       )}
-    </div>
+    </Box>
   );
 }
