@@ -15,11 +15,18 @@ import { useRegister } from "../hooks/useRegister";
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
   const { register, loading } = useRegister();
 
   const handleSubmit = () => {
     register(email, password);
   };
+
+  const passwordsMatch = password === confirmPassword;
+
+  const isFormValid =
+    isValidEmail(email) && isValidPassword(password) && passwordsMatch;
 
   return (
     <Container component="main" maxWidth="xs">
@@ -69,15 +76,29 @@ const RegisterPage: React.FC = () => {
                 : ""
             }
           />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            label="Confirm Password"
+            type="password"
+            autoComplete="new-password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            error={!!confirmPassword && password !== confirmPassword}
+            helperText={
+              confirmPassword && password !== confirmPassword
+                ? "Passwords do not match."
+                : ""
+            }
+          />
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid>
               <Button
                 fullWidth
                 variant="contained"
                 onClick={handleSubmit}
-                disabled={
-                  loading || !isValidEmail(email) || !isValidPassword(password)
-                }
+                disabled={loading || !isFormValid}
               >
                 {loading ? (
                   <CircularProgress size={24} color="inherit" />
