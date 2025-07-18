@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useSnackbar from "../hooks/useSnackbar";
+import { isValidEmail, isValidPassword } from "../utils/validation";
+
 
 const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -43,7 +45,7 @@ const RegisterPage: React.FC = () => {
 
       await response.json();
       showSnackbar("Registration successful! Please log in.", "success");
-      setTimeout(() => navigate("/login"), 1000);
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
       showSnackbar(`Registration failed.${err instanceof Error ? ` ${err.message}` : ""}`, "error");
     } finally {
@@ -76,6 +78,12 @@ const RegisterPage: React.FC = () => {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            error={!!email && !isValidEmail(email)}
+            helperText={
+              email && !isValidEmail(email)
+                ? "Please enter a valid email address."
+                : ""
+            }
           />
           <TextField
             margin="normal"
@@ -93,9 +101,9 @@ const RegisterPage: React.FC = () => {
                 fullWidth
                 variant="contained"
                 onClick={handleRegister}
-                disabled={loading}
+                disabled={loading || !isValidEmail(email) || !isValidPassword(password)}
               >
-                {loading ? <CircularProgress size={24} color="inherit" /> : "Register"}
+                {loading ? <CircularProgress color="inherit" /> : "Register"}
               </Button>
             </Grid>
           </Grid>
