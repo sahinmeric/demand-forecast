@@ -45,7 +45,7 @@ const RegisterPage: React.FC = () => {
             autoComplete="email"
             autoFocus
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value.toLowerCase())}
             error={!!email && !isValidEmail(email)}
             helperText={
               email && !isValidEmail(email)
@@ -62,6 +62,12 @@ const RegisterPage: React.FC = () => {
             autoComplete="new-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            error={!!password && !isValidPassword(password)}
+            helperText={
+              password && !isValidPassword(password)
+                ? "Password must be at least 6 characters."
+                : ""
+            }
           />
           <Grid container spacing={2} sx={{ mt: 2 }}>
             <Grid>
@@ -73,7 +79,11 @@ const RegisterPage: React.FC = () => {
                   loading || !isValidEmail(email) || !isValidPassword(password)
                 }
               >
-                {loading ? <CircularProgress color="inherit" /> : "Register"}
+                {loading ? (
+                  <CircularProgress size={24} color="inherit" />
+                ) : (
+                  "Register"
+                )}
               </Button>
             </Grid>
           </Grid>
