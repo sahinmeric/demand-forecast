@@ -8,3 +8,15 @@ export type UploadPreview = {
 export type FieldMapping = {
   [key: string]: string;
 };
+
+export type SalesRow = {
+  id: number;
+  sku: string;
+  date: string;
+  quantity: number;
+  price: number;
+  promotion: boolean;
+  category: string;
+  fileName: string;
+  uploadedAt: string;
+};
