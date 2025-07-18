@@ -9,6 +9,8 @@ import HomePage from './pages/HomePage';
 import Navigation from './components/Navigation';
 import PrivateRoute from './components/PrivateRoute';
 import { isAuthenticated } from './auth';
+import RegisterPage from './pages/RegisterPage';
+
 
 function App() {
   return (
@@ -17,7 +19,7 @@ function App() {
       <Routes>
         <Route path="/" element={isAuthenticated() ? <Navigate to="/dashboard" replace /> : <HomePage />} />
         <Route path="/login" element={<AuthForm mode="login" />} />
-      <Route path="/register" element={<AuthForm mode="register" />} />
+      <Route path="/register" element={<RegisterPage />} />
       <Route path="/dashboard" element={<PrivateRoute><DashboardPage /></PrivateRoute>} />
       <Route path="/upload" element={<PrivateRoute><UploadPage /></PrivateRoute>} />
       <Route path="/sales" element={<PrivateRoute><SalesTablePage /></PrivateRoute>} />
