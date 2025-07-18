@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import FileUpload from '../components/FileUpload';
-import FieldMapping from '../components/FieldMapping';
-import DataValidation from '../components/DataValidation';
-
+import { useState } from "react";
+import FileUpload from "../components/FileUpload";
+import FieldMapping from "../components/FieldMapping";
+import DataValidation from "../components/DataValidation";
+import type { UploadPreview, FieldMapping as MappingType } from "../types";
 
 export default function UploadPage() {
-  const [preview, setPreview] = useState<any | null>(null);
-  const [mapping, setMapping] = useState<any | null>(null);
+  const [preview, setPreview] = useState<UploadPreview | null>(null);
+  const [mapping, setMapping] = useState<MappingType | null>(null);
 
   return (
     <div>
@@ -15,11 +15,18 @@ export default function UploadPage() {
       {!preview && <FileUpload onUploadComplete={setPreview} />}
 
       {preview && !mapping && (
-        <FieldMapping preview={preview.preview} onMappingComplete={setMapping} />
+        <FieldMapping
+          preview={preview.preview}
+          onMappingComplete={setMapping}
+        />
       )}
 
       {mapping && (
-        <DataValidation preview={preview.preview} mapping={mapping} fileName={preview.name} />
+        <DataValidation
+          preview={preview?.preview || []}
+          mapping={mapping}
+          fileName={preview?.name || "Uploaded File"}
+        />
       )}
     </div>
   );
