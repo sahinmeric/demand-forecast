@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { getAccessToken } from "../auth";
-
-type User = {
-  id: number;
-  email: string;
-  role: string;
-};
+import type { User } from "../types";
 
 const useCurrentUser = () => {
   const [user, setUser] = useState<User | null>(null);
