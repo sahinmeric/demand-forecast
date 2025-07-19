@@ -8,17 +8,20 @@ type SaveResult = {
 
 export function useSaveCleanData() {
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
+  const [saveMessage, setSaveMessage] = useState("");
+  const [error, setError] = useState("");
 
   const saveToDatabase = async (
     validRows: Record<string, unknown>[],
     fileName: string
   ): Promise<SaveResult> => {
     setSaving(true);
-    setMessage("");
+    setSaveMessage("");
+    setError("");
 
     try {
       const token = getAccessToken();
+
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}/api/files/save`,
         {
@@ -34,16 +37,23 @@ export function useSaveCleanData() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
 
-      setMessage(`✅ ${data.message}`);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setSaveMessage(`✅ ${data.message}`);
       return { success: true, message: data.message };
     } catch (err) {
-      const errorMsg = err instanceof Error ? err.message : "Unknown error";
-      setMessage(`❌ Save failed: ${errorMsg}`);
-      return { success: false, message: errorMsg };
-    } finally {
+      const msg = err instanceof Error ? err.message : "Unknown error";
+      setError(msg);
+      setSaveMessage(`❌ Save failed: ${msg}`);
       setSaving(false);
+      return { success: false, message: msg };
     }
   };
 
-  return { saveToDatabase, saving, message };
+  return {
+    saving,
+    saveMessage,
+    error,
+    saveToDatabase,
+  };
 }
