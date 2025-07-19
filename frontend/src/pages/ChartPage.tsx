@@ -1,15 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  AreaChart,
-  Area,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-  Legend,
-} from "recharts";
-import {
   Button,
   MenuItem,
   Select,
@@ -22,16 +12,10 @@ import { useSalesData } from "../hooks/useSalesData";
 import { getUniqueSkus } from "../utils/getUniqueSkus";
 import Loader from "../components/Loader";
 import type { SalesRecord, ForecastRecord } from "../types";
+import type { CombinedRow } from "../types";
+import ForecastChart from "../components/ForecastChart";
 
-type CombinedRow = {
-  date: string;
-  actual?: number;
-  forecast?: number;
-  upper?: number;
-  lower?: number;
-};
-
-export default function ForecastChartPage() {
+export default function ChartPage() {
   const { rows: salesRows, loading: salesLoading } = useSalesData();
   const [sku, setSku] = useState<string | null>(null);
   const [data, setData] = useState<CombinedRow[]>([]);
@@ -156,52 +140,7 @@ export default function ForecastChartPage() {
               {error}
             </Alert>
           )}
-
-          <AreaChart
-            width={900}
-            height={400}
-            data={data}
-            margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="conf" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#ccc" stopOpacity={0.5} />
-                <stop offset="100%" stopColor="#ccc" stopOpacity={0} />
-              </linearGradient>
-            </defs>
-
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line
-              type="monotone"
-              dataKey="actual"
-              stroke="#8884d8"
-              name="Actual"
-            />
-            <Line
-              type="monotone"
-              dataKey="forecast"
-              stroke="#82ca9d"
-              name="Forecast"
-            />
-            <Area
-              type="monotone"
-              dataKey="upper"
-              stroke="none"
-              fill="url(#conf)"
-              dot={false}
-            />
-            <Area
-              type="monotone"
-              dataKey="lower"
-              stroke="none"
-              fill="url(#conf)"
-              dot={false}
-            />
-          </AreaChart>
+          <ForecastChart data={data} />
         </>
       )}
     </Box>
