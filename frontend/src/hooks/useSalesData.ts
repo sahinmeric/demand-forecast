@@ -20,10 +20,13 @@ export function useSalesData() {
 
         const data = await res.json();
         if (!res.ok) throw new Error(data.message);
-        setRows(data.records);
+
+        setTimeout(() => {
+          setRows(data.records);
+          setLoading(false);
+        }, 2000);
       } catch (err) {
         setError((err as Error).message || "Failed to load sales data");
-      } finally {
         setLoading(false);
       }
     };
