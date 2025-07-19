@@ -8,11 +8,12 @@ import {
   TextField,
   Button,
   Typography,
-  CircularProgress,
   Alert,
+  Box,
 } from "@mui/material";
 import { validators } from "../utils/validationRules";
 import type { PreviewRow } from "../types";
+import Loader from "./Loader";
 
 type Props = {
   data: PreviewRow[];
@@ -57,8 +58,12 @@ export default function DataValidationTable({
 
   const isValid = errors.every((row) => row.every((cell) => !cell));
 
+  if (saving) {
+    return <Loader message="Saving data..." fullHeight />;
+  }
+
   return (
-    <>
+    <Box>
       <Typography variant="h6" gutterBottom>
         Step 3: Validate & Clean Data
       </Typography>
@@ -107,11 +112,7 @@ export default function DataValidationTable({
         sx={{ mt: 2 }}
         onClick={() => onSave(rows, fileName)}
       >
-        {saving ? (
-          <CircularProgress size={22} color="inherit" />
-        ) : (
-          "Save to database"
-        )}
+        Save to database
       </Button>
 
       {message && (
@@ -122,6 +123,6 @@ export default function DataValidationTable({
           {message}
         </Alert>
       )}
-    </>
+    </Box>
   );
 }
