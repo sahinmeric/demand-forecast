@@ -37,7 +37,7 @@ export default function UploadPage() {
 
       {preview && mapping && !saved && (
         <DataValidationTable
-          data={preview.preview}
+          data={preview.fullData}
           mapping={mapping}
           fileName={preview.name}
           onSave={handleSave}
