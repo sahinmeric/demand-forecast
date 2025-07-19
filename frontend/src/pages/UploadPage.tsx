@@ -4,14 +4,15 @@ import FieldMapping from "../components/FieldMapping";
 import DataValidationTable from "../components/DataValidationTable";
 import type { UploadPreview } from "../types";
 import { useSaveCleanData } from "../hooks/useSaveCleanData";
-import { Container } from "@mui/material";
+import PageLayout from "../components/PageLayout";
+import { Alert } from "@mui/material";
 
 export default function UploadPage() {
   const [preview, setPreview] = useState<UploadPreview | null>(null);
   const [mapping, setMapping] = useState<Record<string, string> | null>(null);
   const [saved, setSaved] = useState(false);
 
-  const { saveToDatabase, saving, message } = useSaveCleanData();
+  const { saveToDatabase, saving, saveMessage, error } = useSaveCleanData();
 
   const handleSave = async (
     validRows: Record<string, unknown>[],
@@ -24,9 +25,7 @@ export default function UploadPage() {
   };
 
   return (
-    <Container sx={{ mt: 4 }}>
-      <h2>Upload Data Wizard</h2>
-
+    <PageLayout title="Upload Data Wizard">
       {!preview && <FileUpload onUploadComplete={setPreview} />}
 
       {preview && !mapping && (
@@ -43,11 +42,11 @@ export default function UploadPage() {
           fileName={preview.name}
           onSave={handleSave}
           saving={saving}
-          message={message}
+          message={saveMessage}
         />
       )}
-
+      {error && <Alert severity="error">{error}</Alert>}
       {saved && <p>🎉 Data is validated and saved successfully!</p>}
-    </Container>
+    </PageLayout>
   );
 }
