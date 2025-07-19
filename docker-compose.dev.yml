@@ -35,6 +35,5 @@ services:
     environment:
       VITE_API_URL: http://localhost:3000
 
-
 volumes:
   pgdata:
