@@ -1,3 +1,9 @@
+export type User = {
+  id: number;
+  email: string;
+  role: "user" | "admin";
+};
+
 export type PreviewRow = Record<string, string>;
 
 export type UploadPreview = {
