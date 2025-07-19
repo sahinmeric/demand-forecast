@@ -39,3 +39,15 @@ export const isAuthenticated = (): boolean => {
     return false;
   }
 };
+
+export const getUserRole = (): "user" | "admin" | null => {
+  const token = getAccessToken();
+  if (!token) return null;
+
+  try {
+    const { role } = jwtDecode<{ role: "user" | "admin" }>(token);
+    return role;
+  } catch {
+    return null;
+  }
+};
