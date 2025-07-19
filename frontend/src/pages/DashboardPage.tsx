@@ -1,18 +1,12 @@
-import {
-  Container,
-  Paper,
-  Typography,
-  Box,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
+import { Paper, Typography, Box, CircularProgress, Alert } from "@mui/material";
 import useCurrentUser from "../hooks/useCurrentUser";
+import PageLayout from "../components/PageLayout";
 
 export default function DashboardPage() {
   const { user, loading, error } = useCurrentUser();
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 8 }}>
+    <PageLayout title="Dashboard">
       <Paper elevation={4} sx={{ p: 4, textAlign: "center" }}>
         {loading ? (
           <CircularProgress />
@@ -28,6 +22,6 @@ export default function DashboardPage() {
           </Box>
         ) : null}
       </Paper>
-    </Container>
+    </PageLayout>
   );
 }
