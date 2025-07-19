@@ -10,7 +10,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { isAuthenticated } from "./auth";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import AdminUsersPage from "./pages/AdminUsersPage";
+import AdminPage from "./pages/AdminPage";
 
 function App() {
   return (
@@ -73,7 +73,7 @@ function App() {
           path="/admin/users"
           element={
             <PrivateRoute>
-              <AdminUsersPage />
+              <AdminPage />
             </PrivateRoute>
           }
         />
