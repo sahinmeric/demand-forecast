@@ -2,14 +2,14 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { logout, isAuthenticated } from "../auth";
+import { logout, isAuthenticated, getUserRole } from "../auth";
 
 const Navigation: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/", { replace: true });
+    navigate("/login");
   };
 
   if (!isAuthenticated()) return null;
@@ -35,6 +35,11 @@ const Navigation: React.FC = () => {
         <Button color="inherit" onClick={() => navigate("/charts")}>
           Charts
         </Button>
+        {getUserRole() === "admin" && (
+          <Button color="inherit" onClick={() => navigate("/admin/users")}>
+            Users
+          </Button>
+        )}
         <IconButton onClick={handleLogout}>
           <LogoutIcon />
         </IconButton>
