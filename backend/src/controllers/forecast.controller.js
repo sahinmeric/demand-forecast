@@ -60,6 +60,63 @@ const generateForecasts = async (req, res) => {
   }
 };
 
+const generateForecastForSKU = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+    const { sku } = req.params;
+    const horizon = 3;
+
+    if (!sku) {
+      return res.status(400).json({ message: 'SKU is required' });
+    }
+
+    const sales = await prisma.salesData.findMany({
+      where: { userId, sku },
+    });
+
+    if (sales.length === 0) {
+      return res.status(404).json({ message: `No sales data for SKU ${sku}` });
+    }
+
+    const avgQty = sales.reduce((sum, r) => sum + r.quantity, 0) / sales.length;
+    const now = new Date();
+    const forecasts = [];
+
+    for (let i = 1; i <= horizon; i++) {
+      const forecastDate = new Date(now.getFullYear(), now.getMonth() + i, 1);
+      const seasonalFactor = randomFloat(1.0, 1.2);
+      const trend = randomFloat(0.01, 0.05);
+      const confidence = [0.8, 0.9, 0.95][Math.floor(Math.random() * 3)];
+
+      const base = Math.round(avgQty * (1 + trend));
+      const lower = Math.round(base * 0.8);
+      const upper = Math.round(base * 1.2);
+
+      forecasts.push({
+        userId,
+        sku,
+        forecastDate,
+        baseValue: base,
+        lowerBound: lower,
+        upperBound: upper,
+        confidenceLevel: confidence,
+        seasonalFactor,
+        trendComponent: trend,
+        modelVersion: 'v1.0',
+        dataQualityScore: randomFloat(0.7, 0.95),
+      });
+    }
+
+    await prisma.forecast.createMany({ data: forecasts });
+
+    res.status(201).json({ message: `Generated ${forecasts.length} forecasts for ${sku}` });
+  } catch (err) {
+    console.error('Forecast generation failed for SKU:', err);
+    res.status(500).json({ message: 'Failed to generate forecast for SKU' });
+  }
+};
+
+
 // --- helpers ---
 
 function groupBySKU(rows) {
@@ -106,6 +163,7 @@ const getForecastsBySKU = async (req, res) => {
 
 module.exports = {
   generateForecasts,
+  generateForecastForSKU,
   getForecasts,
   getForecastsBySKU,
 };
