@@ -3,6 +3,7 @@ export type PreviewRow = Record<string, string>;
 export type UploadPreview = {
   name: string;
   preview: PreviewRow[];
+  fullData: PreviewRow[];
 };
 
 export type FieldMapping = {
