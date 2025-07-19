@@ -4,57 +4,26 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  CircularProgress,
   Alert,
   Button,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { getAccessToken, getUserRole } from "../auth";
+import { getUserRole } from "../auth";
 import { Navigate } from "react-router-dom";
 import PageLayout from "../components/PageLayout";
+import { useGetUsers } from "../hooks/useGetUsers";
 
-type User = {
-  id: number;
-  email: string;
-  role: "user" | "admin";
-};
-
-export default function AdminUsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const token = getAccessToken();
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/admin/users`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message);
-        setUsers(data.users);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load users");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+export default function AdminPage() {
+  const { users, loading, error } = useGetUsers();
 
   const role = getUserRole();
   if (role !== "admin") return <Navigate to="/" replace />;
 
   return (
-    <PageLayout title="User Management">
-      {loading && <CircularProgress />}
+    <PageLayout
+      title="User Management"
+      loading={loading}
+      loadingMessage="Loading users..."
+    >
       {error && (
         <Alert severity="error" sx={{ mb: 2 }}>
           {error}
