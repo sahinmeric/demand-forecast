@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import type { PreviewRow } from "../types";
+import Loader from "./Loader";
+
 type Props = {
   preview: PreviewRow[];
   onMappingComplete: (mapping: Record<string, string>) => void;
@@ -33,6 +35,7 @@ export default function FieldMapping({ preview, onMappingComplete }: Props) {
   const [columns, setColumns] = useState<string[]>([]);
   const [mapping, setMapping] = useState<Record<string, string>>({});
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (preview.length > 0) {
@@ -45,6 +48,7 @@ export default function FieldMapping({ preview, onMappingComplete }: Props) {
   };
 
   const handleSubmit = () => {
+    setLoading(true);
     const usedFields = Object.values(mapping);
     const missing = REQUIRED_FIELDS.filter(
       (field) => !usedFields.includes(field)
@@ -52,18 +56,28 @@ export default function FieldMapping({ preview, onMappingComplete }: Props) {
 
     if (missing.length > 0) {
       setError(`Missing required mappings: ${missing.join(", ")}`);
+      setLoading(false);
       return;
     }
 
     const duplicates = usedFields.filter((v, i, a) => a.indexOf(v) !== i);
     if (duplicates.length > 0) {
       setError(`Duplicate mappings not allowed: ${duplicates.join(", ")}`);
+      setLoading(false);
       return;
     }
 
     setError("");
-    onMappingComplete(mapping);
+
+    setTimeout(() => {
+      onMappingComplete(mapping);
+      setLoading(false);
+    }, 2000);
   };
+
+  if (loading) {
+    return <Loader message="Mapping columns..." fullHeight />;
+  }
 
   return (
     <Box>
