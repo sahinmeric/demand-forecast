@@ -59,6 +59,13 @@ export default function UploadPage() {
           <Typography variant="h5" gutterBottom>
             🎉 Data is validated and saved successfully!
           </Typography>
+          <Typography variant="body1" gutterBottom>
+            {saveMessage ||
+              "Your data has been successfully saved to the database."}
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            You can now proceed to view or analyze your sales data.
+          </Typography>
           <Button
             variant="contained"
             color="primary"
