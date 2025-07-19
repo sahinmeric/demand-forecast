@@ -35,3 +35,11 @@ export type ForecastRecord = {
   upperBound: number;
   lowerBound: number;
 };
+
+export type CombinedRow = {
+  date: string;
+  actual?: number;
+  forecast?: number;
+  upper?: number;
+  lower?: number;
+};
