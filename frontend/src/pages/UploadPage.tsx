@@ -5,7 +5,7 @@ import DataValidationTable from "../components/DataValidationTable";
 import type { UploadPreview } from "../types";
 import { useSaveCleanData } from "../hooks/useSaveCleanData";
 import PageLayout from "../components/PageLayout";
-import { Alert } from "@mui/material";
+import { Alert, Box, Typography, Button } from "@mui/material";
 
 export default function UploadPage() {
   const [preview, setPreview] = useState<UploadPreview | null>(null);
@@ -46,7 +46,29 @@ export default function UploadPage() {
         />
       )}
       {error && <Alert severity="error">{error}</Alert>}
-      {saved && <p>🎉 Data is validated and saved successfully!</p>}
+      {saved && (
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          minHeight="300px"
+          mt={4}
+          textAlign="center"
+        >
+          <Typography variant="h5" gutterBottom>
+            🎉 Data is validated and saved successfully!
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            href="/sales"
+            sx={{ mt: 2 }}
+          >
+            Go to Sales Data
+          </Button>
+        </Box>
+      )}
     </PageLayout>
   );
 }
