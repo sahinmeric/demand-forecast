@@ -1,8 +1,10 @@
-import { Button, Typography, Alert } from "@mui/material";
+import { Button, Alert } from "@mui/material";
 import { useForecasts } from "../hooks/useForecasts";
 import ForecastTable from "../components/ForecastTable";
 import { useGenerateForecast } from "../hooks/useGenerateForecast";
 import Loader from "../components/Loader";
+import PageLayout from "../components/PageLayout";
+
 export default function ForecastPage() {
   const {
     forecasts,
@@ -20,19 +22,15 @@ export default function ForecastPage() {
   };
 
   if (loadingForecasts) {
-    return <Loader message="Loading forecasts..." />;
+    return <Loader message="Loading forecasts..." fullHeight />;
   }
 
   if (generating) {
-    return <Loader message="Generating forecasts..." />;
+    return <Loader message="Generating forecasts..." fullHeight />;
   }
 
   return (
-    <>
-      <Typography variant="h5" gutterBottom>
-        Forecast Results
-      </Typography>
-
+    <PageLayout title="Forecast Results">
       <Button
         variant="contained"
         onClick={handleGenerate}
@@ -50,6 +48,6 @@ export default function ForecastPage() {
       {error && <Alert severity="error">{error}</Alert>}
 
       <ForecastTable forecasts={forecasts} />
-    </>
+    </PageLayout>
   );
 }
