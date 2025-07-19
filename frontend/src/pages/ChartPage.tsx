@@ -1,19 +1,12 @@
 import { useState, useEffect } from "react";
-import {
-  Button,
-  MenuItem,
-  Select,
-  Typography,
-  Alert,
-  Box,
-} from "@mui/material";
+import { Button, MenuItem, Select, Alert, Box } from "@mui/material";
 import { useGenerateForecastForSku } from "../hooks/useGenerateForecastForSku";
 import { useSalesData } from "../hooks/useSalesData";
 import { getUniqueSkus } from "../utils/getUniqueSkus";
-import Loader from "../components/Loader";
 import type { SalesRecord, ForecastRecord } from "../types";
 import type { CombinedRow } from "../types";
 import ForecastChart from "../components/ForecastChart";
+import PageLayout from "../components/PageLayout";
 
 export default function ChartPage() {
   const { rows: salesRows, loading: salesLoading } = useSalesData();
@@ -30,7 +23,7 @@ export default function ChartPage() {
 
   useEffect(() => {
     if (!sku && uniqueSkus.length > 0) {
-      setSku(uniqueSkus[0]); // default to first available SKU
+      setSku(uniqueSkus[0]);
     }
   }, [uniqueSkus]);
 
@@ -90,14 +83,12 @@ export default function ChartPage() {
     if (result.success) await fetchCombined();
   };
 
-  if (salesLoading) return <Loader message="Loading SKUs..." fullHeight />;
-
   return (
-    <Box sx={{ px: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        Forecast Chart
-      </Typography>
-
+    <PageLayout
+      title="Sales Forecast"
+      loading={salesLoading}
+      loadingMessage="Loading forecast data..."
+    >
       {uniqueSkus.length === 0 ? (
         <Alert severity="info">
           No sales data found. Please upload data first.
@@ -143,6 +134,6 @@ export default function ChartPage() {
           <ForecastChart data={data} />
         </>
       )}
-    </Box>
+    </PageLayout>
   );
 }
