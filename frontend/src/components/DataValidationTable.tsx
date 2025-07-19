@@ -56,6 +56,18 @@ export default function DataValidationTable({
     setRows(updatedRows);
   };
 
+  const handleSave = () => {
+    const cleanRows = rows.map((row) => {
+      const cleaned: Record<string, string> = {};
+      for (const original in mapping) {
+        const expected = mapping[original];
+        cleaned[expected] = row[original];
+      }
+      return cleaned;
+    });
+    onSave(cleanRows, fileName);
+  };
+
   const isValid = errors.every((row) => row.every((cell) => !cell));
 
   if (saving) {
@@ -110,7 +122,7 @@ export default function DataValidationTable({
         color="primary"
         disabled={!isValid || saving}
         sx={{ mt: 2 }}
-        onClick={() => onSave(rows, fileName)}
+        onClick={handleSave}
       >
         Save to database
       </Button>
