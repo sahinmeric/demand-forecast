@@ -12,7 +12,7 @@ async function main() {
     create: {
       email: 'admin@test.com',
       password: hashedPassword,
-      role: 'user',
+      role: 'admin',
     },
   });
 
