@@ -26,3 +26,12 @@ export type Filters = {
   fromDate?: string;
   toDate?: string;
 };
+
+export type SalesRecord = { date: string; quantity: number };
+
+export type ForecastRecord = {
+  forecastDate: string;
+  baseValue: number;
+  upperBound: number;
+  lowerBound: number;
+};
