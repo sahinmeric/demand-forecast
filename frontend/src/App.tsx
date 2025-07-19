@@ -10,6 +10,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import { isAuthenticated } from "./auth";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import AdminUsersPage from "./pages/AdminUsersPage";
 
 function App() {
   return (
@@ -68,6 +69,15 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route
+          path="/admin/users"
+          element={
+            <PrivateRoute>
+              <AdminUsersPage />
+            </PrivateRoute>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );
