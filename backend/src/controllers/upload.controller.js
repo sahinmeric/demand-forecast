@@ -18,10 +18,14 @@ const uploadFile = async (req, res) => {
       const stream = Readable.from(file.buffer)
         .pipe(csv())
         .on('data', (row) => {
-          if (rows.length < 5) rows.push(row);
+          rows.push(row);
         })
         .on('end', () => {
-          res.status(200).json({ preview: rows, name: originalName });
+          res.status(200).json({
+            name: originalName,
+            preview: rows.slice(0, 5),
+            fullData: rows,
+          });
         });
     } else if (
       originalName.endsWith('.xlsx')
@@ -29,7 +33,11 @@ const uploadFile = async (req, res) => {
       const workbook = xlsx.read(file.buffer, { type: 'buffer', cellDates: true });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const rows = xlsx.utils.sheet_to_json(sheet, { raw: false });
-      res.status(200).json({ preview: rows.slice(0, 5), name: originalName });
+      res.status(200).json({
+        name: originalName,
+        preview: rows.slice(0, 5),
+        fullData: rows,
+      });
     } else {
       return res.status(400).json({ message: 'Unsupported file format' });
     }
