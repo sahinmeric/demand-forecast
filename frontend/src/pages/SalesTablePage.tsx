@@ -10,11 +10,11 @@ import {
   TableBody,
   Paper,
   Alert,
-  Container,
   CircularProgress,
 } from "@mui/material";
 import { useSalesData } from "../hooks/useSalesData";
 import { filterSalesRows } from "../utils/filterSalesData";
+import PageLayout from "../components/PageLayout";
 
 export default function SalesTablePage() {
   const [skuFilter, setSkuFilter] = useState("");
@@ -28,11 +28,7 @@ export default function SalesTablePage() {
   });
 
   return (
-    <Container sx={{ mt: 4 }}>
-      <Typography variant="h5" gutterBottom>
-        Sales Data
-      </Typography>
-
+    <PageLayout title="Sales Data">
       {error && <Alert severity="error">{error}</Alert>}
       {loading && (
         <Box display="flex" justifyContent="center" mt={2}>
@@ -103,6 +99,6 @@ export default function SalesTablePage() {
           No matching rows.
         </Typography>
       )}
-    </Container>
+    </PageLayout>
   );
 }
