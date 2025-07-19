@@ -2,6 +2,7 @@ import { Box, Typography, Paper, Alert } from "@mui/material";
 import type { UploadPreview } from "../types";
 import { useFileUpload } from "../hooks/useFileUpload";
 import Loader from "./Loader";
+
 type Props = {
   onUploadComplete: (data: UploadPreview) => void;
 };
@@ -11,11 +12,15 @@ export default function FileUpload({ onUploadComplete }: Props) {
     useFileUpload(onUploadComplete);
 
   if (loading) {
-    return <Loader message="Uploading file..." />;
+    return <Loader message="Uploading file..." fullHeight />;
   }
 
   return (
     <Box>
+      <Typography variant="h6" gutterBottom>
+        Step 1: Upload Your Data File
+      </Typography>
+
       <Paper
         variant="outlined"
         {...getRootProps()}
