@@ -10,7 +10,6 @@ import {
   TableBody,
   Paper,
   Alert,
-  CircularProgress,
 } from "@mui/material";
 import { useSalesData } from "../hooks/useSalesData";
 import { filterSalesRows } from "../utils/filterSalesData";
@@ -28,13 +27,12 @@ export default function SalesTablePage() {
   });
 
   return (
-    <PageLayout title="Sales Data">
+    <PageLayout
+      title="Sales Data"
+      loading={loading}
+      loadingMessage="Loading sales data..."
+    >
       {error && <Alert severity="error">{error}</Alert>}
-      {loading && (
-        <Box display="flex" justifyContent="center" mt={2}>
-          <CircularProgress />
-        </Box>
-      )}
 
       <Box display="flex" gap={2} my={2}>
         <TextField
