@@ -1,11 +1,18 @@
+# Use Node base image
 FROM node:20-alpine
 
+# Create app directory
 WORKDIR /app
 
-COPY backend/package*.json ./
+# Copy package files and install deps
+COPY package*.json ./
 RUN npm install --omit=dev
 
-COPY backend ./
-RUN npx prisma generate
+# Copy the rest of the backend code
+COPY . .
 
-CMD ["node", "src/index.js"]
+# Expose port (match backend PORT)
+EXPOSE 3000
+
+# Start server
+CMD ["npm", "run", "start"]
