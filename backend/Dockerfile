@@ -11,6 +11,9 @@ RUN npm install --omit=dev
 # Copy the rest of the backend code
 COPY . .
 
+# Generate Prisma client
+RUN npx prisma generate
+
 # Expose port (match backend PORT)
 EXPOSE 3000
 
