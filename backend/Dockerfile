@@ -17,5 +17,5 @@ RUN npx prisma generate
 # Expose port (match backend PORT)
 EXPOSE 3000
 
-# Start server
-CMD ["npm", "run", "start"]
+# Apply Prisma migrations and start app
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node src/index.js"]
