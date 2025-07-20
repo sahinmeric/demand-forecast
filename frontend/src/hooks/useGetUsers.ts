@@ -7,31 +7,33 @@ export function useGetUsers() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const token = getAccessToken();
-        const res = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/admin/users`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const token = getAccessToken();
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/admin/users`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message);
-        setTimeout(() => {
-          setUsers(data.users);
-          setLoading(false);
-        }, 2000);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Failed to load users");
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+
+      setTimeout(() => {
+        setUsers(data.users);
         setLoading(false);
-      }
-    };
+      }, 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to load users");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchUsers();
   }, []);
 
-  return { users, loading, error };
+  return { users, loading, error, refetch: fetchUsers };
 }
