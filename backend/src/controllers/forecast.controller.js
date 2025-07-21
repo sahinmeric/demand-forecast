@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const generateForecasts = async (req, res) => {
   try {
     const userId = req.user.userId;
-    const horizon = 3; // months to forecast
+    const horizon = 5; // months to forecast
 
     const recentSales = await prisma.salesData.findMany({
       where: { userId },
