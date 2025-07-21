@@ -1,10 +1,10 @@
 id,producto_id,fecha_venta,cantidad,valor_unitario,promocion,tipo_producto
-1,PROD001,2024-01-01,225,19.49,no,cocina
-2,PROD002,2024-01-01,92,5.37,no,hogar
-3,PROD003,2024-01-01,103,6.59,no,hogar
-4,PROD004,2024-01-01,245,13.63,sí,hogar
-5,PROD001,2024-01-02,114,10.86,sí,cocina
-6,PROD002,2024-01-02,168,15.37,sí,cocina
+1,PROD001,,225,19.49,no,cocina
+2,PROD002,2024-01-01,,5.37,no,hogar
+3,PROD003,2024-01-01,103,,no,hogar
+4,PROD004,2024-01-01,245,13.63,,hogar
+5,PROD001,2024-01-02,114,10.86,sí,
+6,PROD002,2024-01-02,168,15.37,true,cocina
 7,PROD003,2024-01-02,197,6.08,sí,hogar
 8,PROD004,2024-01-02,185,15.07,sí,cocina
 9,PROD001,2024-01-03,244,12.9,sí,cocina
