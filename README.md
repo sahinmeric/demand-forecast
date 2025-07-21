@@ -66,7 +66,7 @@ cd demand-forecast
 
 Create `backend/.env.dev` and `frontend/.env.dev` based on `.env.example`. Example backend env:
 
-```env
+```env.dev
 PORT=3000
 DATABASE_URL=postgres://forecast_user:forecast_pass@postgres:5432/forecastdb
 ACCESS_TOKEN_SECRET=your-secret
@@ -77,7 +77,7 @@ REFRESH_TOKEN_EXPIRES_IN=7d
 
 Frontend:
 
-```env
+```env.dev
 VITE_API_URL=http://localhost:3000
 ```
 
@@ -192,7 +192,7 @@ Built using Material UI’s grid system and `Box`, all views adapt to mobile and
 
 #### ✅ Code Splitting Ready
 
-With Vite and React.lazy, pages can be dynamically loaded to reduce bundle size.
+With Vite pages can be dynamically loaded to reduce bundle size.
 
 ---
 
