@@ -60,6 +60,7 @@ export const useFileUpload = (
     onDrop,
     accept: {
       "text/csv": [".csv"],
+      "application/vnd.ms-excel": [".xlsx", ".xls"],
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": [
         ".xlsx",
       ],
