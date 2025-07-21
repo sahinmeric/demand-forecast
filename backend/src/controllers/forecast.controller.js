@@ -64,7 +64,7 @@ const generateForecastForSKU = async (req, res) => {
   try {
     const userId = req.user.userId;
     const { sku } = req.params;
-    const horizon = 3;
+    const horizon = 5;
 
     if (!sku) {
       return res.status(400).json({ message: 'SKU is required' });
