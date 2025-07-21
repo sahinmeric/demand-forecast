@@ -1,14 +1,16 @@
 import { useState } from "react";
 import type { Forecast } from "../hooks/useForecasts";
 import {
+  Box,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  TextField,
   Typography,
+  TablePagination,
 } from "@mui/material";
-import { TablePagination } from "@mui/material";
 
 type Props = {
   forecasts: Forecast[];
@@ -17,8 +19,23 @@ type Props = {
 export default function ForecastTable({ forecasts }: Props) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [skuFilter, setSkuFilter] = useState("");
+  const [minQuality, setMinQuality] = useState("");
+  const [maxQuality, setMaxQuality] = useState("");
 
-  const paginatedForecasts = forecasts.slice(
+  const filtered = forecasts.filter((f) => {
+    const matchesSKU = f.sku.toLowerCase().includes(skuFilter.toLowerCase());
+
+    const minQ = minQuality ? parseFloat(minQuality) / 100 : null;
+    const maxQ = maxQuality ? parseFloat(maxQuality) / 100 : null;
+
+    const matchesMinQ = minQ === null || f.dataQualityScore >= minQ;
+    const matchesMaxQ = maxQ === null || f.dataQualityScore <= maxQ;
+
+    return matchesSKU && matchesMinQ && matchesMaxQ;
+  });
+
+  const paginatedForecasts = filtered.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -29,6 +46,40 @@ export default function ForecastTable({ forecasts }: Props) {
 
   return (
     <>
+      <Box display="flex" gap={2} my={2} flexWrap="wrap">
+        <TextField
+          label="Filter by SKU"
+          value={skuFilter}
+          onChange={(e) => {
+            setSkuFilter(e.target.value);
+            setPage(0);
+          }}
+          size="small"
+        />
+        <TextField
+          label="Min Quality (%)"
+          type="number"
+          inputProps={{ min: 0, max: 100 }}
+          value={minQuality}
+          onChange={(e) => {
+            setMinQuality(e.target.value);
+            setPage(0);
+          }}
+          size="small"
+        />
+        <TextField
+          label="Max Quality (%)"
+          type="number"
+          inputProps={{ min: 0, max: 100 }}
+          value={maxQuality}
+          onChange={(e) => {
+            setMaxQuality(e.target.value);
+            setPage(0);
+          }}
+          size="small"
+        />
+      </Box>
+
       <Table size="small" sx={{ mt: 2 }}>
         <TableHead>
           <TableRow>
@@ -63,7 +114,7 @@ export default function ForecastTable({ forecasts }: Props) {
       </Table>
       <TablePagination
         component="div"
-        count={forecasts.length}
+        count={filtered.length}
         page={page}
         onPageChange={(_, newPage) => setPage(newPage)}
         rowsPerPage={rowsPerPage}
