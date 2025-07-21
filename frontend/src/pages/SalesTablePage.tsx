@@ -14,17 +14,24 @@ import {
 import { useSalesData } from "../hooks/useSalesData";
 import { filterSalesRows } from "../utils/filterSalesData";
 import PageLayout from "../components/PageLayout";
+import { TablePagination } from "@mui/material";
 
 export default function SalesTablePage() {
   const [skuFilter, setSkuFilter] = useState("");
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const { rows, error, loading } = useSalesData();
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const filtered = filterSalesRows(rows, {
     sku: skuFilter,
     fromDate,
     toDate,
   });
+  const paginatedRows = filtered.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <PageLayout
@@ -75,7 +82,7 @@ export default function SalesTablePage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filtered.map((r) => (
+              {paginatedRows.map((r) => (
                 <TableRow key={r.id}>
                   <TableCell>{r.sku}</TableCell>
                   <TableCell>{r.date.slice(0, 10)}</TableCell>
@@ -90,6 +97,18 @@ export default function SalesTablePage() {
                 </TableRow>
               ))}
             </TableBody>
+            <TablePagination
+              component="div"
+              count={filtered.length}
+              page={page}
+              onPageChange={(_, newPage) => setPage(newPage)}
+              rowsPerPage={rowsPerPage}
+              onRowsPerPageChange={(e) => {
+                setRowsPerPage(parseInt(e.target.value, 10));
+                setPage(0);
+              }}
+              rowsPerPageOptions={[10, 25, 50, 100]}
+            />
           </Table>
         </Paper>
       ) : (
