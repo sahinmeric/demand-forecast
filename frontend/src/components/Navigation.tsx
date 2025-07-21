@@ -36,7 +36,7 @@ const Navigation: React.FC = () => {
           Charts
         </Button>
         {getUserRole() === "admin" && (
-          <Button color="inherit" onClick={() => navigate("/admin/users")}>
+          <Button color="inherit" onClick={() => navigate("/admin")}>
             Admin
           </Button>
         )}
