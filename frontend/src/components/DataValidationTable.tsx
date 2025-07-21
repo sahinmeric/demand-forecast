@@ -107,16 +107,31 @@ export default function DataValidationTable({
 
                     return (
                       <TableCell key={colKey}>
-                        <TextField
-                          value={value}
-                          onChange={(e) =>
-                            handleChange(rowIndex, colKey, e.target.value)
-                          }
-                          error={isCellInvalid}
-                          helperText={isCellInvalid ? "Invalid" : ""}
-                          size="small"
-                          fullWidth
-                        />
+                        {mapping[colKey] === "fecha" ? (
+                          <TextField
+                            type="date"
+                            value={value}
+                            onChange={(e) =>
+                              handleChange(rowIndex, colKey, e.target.value)
+                            }
+                            error={isCellInvalid}
+                            helperText={isCellInvalid ? "Invalid" : ""}
+                            size="small"
+                            fullWidth
+                            InputLabelProps={{ shrink: true }}
+                          />
+                        ) : (
+                          <TextField
+                            value={value}
+                            onChange={(e) =>
+                              handleChange(rowIndex, colKey, e.target.value)
+                            }
+                            error={isCellInvalid}
+                            helperText={isCellInvalid ? "Invalid" : ""}
+                            size="small"
+                            fullWidth
+                          />
+                        )}
                       </TableCell>
                     );
                   })}
