@@ -36,7 +36,7 @@ export default function DataValidationTable({
   const [rows, setRows] = useState<PreviewRow[]>(data);
   const [errors, setErrors] = useState<boolean[][]>([]);
   const [page, setPage] = useState(0);
-  const rowsPerPage = 10;
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
     const validationResults = rows.map((row) =>
@@ -124,16 +124,19 @@ export default function DataValidationTable({
               );
             })}
         </TableBody>
-        <TablePagination
-          component="div"
-          count={rows.length}
-          page={page}
-          onPageChange={(_, newPage) => setPage(newPage)}
-          rowsPerPage={rowsPerPage}
-          rowsPerPageOptions={[10]}
-        />
       </Table>
-
+      <TablePagination
+        component="div"
+        count={rows.length}
+        page={page}
+        onPageChange={(_, newPage) => setPage(newPage)}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={(e) => {
+          setRowsPerPage(parseInt(e.target.value, 10));
+          setPage(0);
+        }}
+        rowsPerPageOptions={[10, 25, 50, 100]}
+      />
       <Button
         variant="contained"
         color="primary"
