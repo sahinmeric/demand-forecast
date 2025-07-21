@@ -10,11 +10,11 @@ import {
   Typography,
   Alert,
   Box,
+  TablePagination,
 } from "@mui/material";
 import { validators } from "../utils/validationRules";
 import type { PreviewRow } from "../types";
 import Loader from "./Loader";
-import { TablePagination } from "@mui/material";
 import { FIELD_LABELS } from "../constant/constant";
 
 type Props = {

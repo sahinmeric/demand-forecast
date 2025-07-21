@@ -10,11 +10,11 @@ import {
   TableBody,
   Paper,
   Alert,
+  TablePagination,
 } from "@mui/material";
 import { useSalesData } from "../hooks/useSalesData";
 import { filterSalesRows } from "../utils/filterSalesData";
 import PageLayout from "../components/PageLayout";
-import { TablePagination } from "@mui/material";
 
 export default function SalesTablePage() {
   const [skuFilter, setSkuFilter] = useState("");
