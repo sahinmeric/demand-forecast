@@ -7,7 +7,7 @@ RUN npm install
 COPY backend/. .
 
 # Ensure .env is copied
-COPY backend/.env .env
+COPY backend/.env.dev .env.dev
 
 # Generate Prisma client before container runs
 RUN npx prisma generate
