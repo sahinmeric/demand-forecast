@@ -151,6 +151,93 @@ This app is fully containerized.
 
 ---
 
+## 🎨 Frontend Project Structure & Architecture
+
+The frontend is a well-structured, modular React + TypeScript application built with **Vite** and **Material UI (MUI)**. It prioritizes type safety, code reuse, responsive design, and maintainability.
+
+### 🗂️ Folder Overview
+
+```
+frontend/
+├── src/
+│   ├── components/          # Reusable UI components (Loader, Snackbar, ConfirmDialog, etc.)
+│   ├── hooks/               # Custom hooks (useLogin, useForecasts, useSaveCleanData, etc.)
+│   ├── pages/               # Top-level route views (Login, UploadPage, ForecastPage, AdminPage)
+│   ├── utils/               # Validation, filtering, formatting utilities
+│   ├── context/             # Global providers (SnackbarContext, ConfirmDialogContext)
+│   ├── types/               # Centralized TypeScript interfaces
+│   ├── auth.ts              # Auth helpers (token management, role checks)
+│   ├── App.tsx              # Main router and layout
+│   └── main.tsx             # App bootstrap
+```
+
+### 💡 Architecture Highlights
+
+#### ✅ Custom Hooks
+
+Encapsulate API logic (auth, forecasting, saving data) to keep components clean.
+
+#### ✅ Global Contexts
+
+- **SnackbarContext**: Feedback system for success/error messages.
+- **ConfirmDialogContext**: Replaces `window.confirm` with MUI-based modal.
+
+#### ✅ Type Safety
+
+All shared data models are fully typed, enabling better dev experience and avoiding runtime issues.
+
+#### ✅ Responsive Design
+
+Built using Material UI’s grid system and `Box`, all views adapt to mobile and desktop.
+
+#### ✅ Code Splitting Ready
+
+With Vite and React.lazy, pages can be dynamically loaded to reduce bundle size.
+
+---
+
+## 🛠️ Backend Project Structure & Architecture
+
+The backend is a Node.js + Express API using **Prisma ORM** and JWT-based authentication. It connects to a **PostgreSQL** database and exposes RESTful endpoints for auth, file uploads, forecasting, and admin features.
+
+### 🗂️ Folder Overview
+
+```
+backend/
+├── prisma/                  # Prisma schema and migration config
+│   └── seed.js              # Seed script for admin user, config, and test data
+├── src/
+│   ├── controllers/         # Route logic: auth, forecast, upload, user
+│   ├── middleware/          # Auth & role-check middlewares
+│   ├── routes/              # Route definitions (auth, forecast, admin, upload)
+│   ├── services/            # Forecasting and token utilities
+│   ├── utils/               # CSV parsing, validation helpers (if added)
+│   └── index.js             # Express app bootstrap
+```
+
+### 🔐 Authentication & Security
+
+- JWT access and refresh token system
+- Role-based route protection via `authMiddleware` and `isAdmin`
+- Secrets and expiration via `.env`
+
+### 🧠 Forecasting Logic
+
+- Sales data processed by statistical model
+- Forecasts saved with base, upper, lower bounds
+- Confidence intervals and quality scores computed
+
+### 🔄 File Upload Pipeline
+
+- User uploads CSV/XLSX → preview → map fields → validate → save
+- Async validation with inline editing before DB save
+
+### 🧪 Testing & Seeding
+
+- `seed.js` inserts admin + demo data
+- Prisma handles schema migration
+- Docker-based local dev and production configs available
+
 ## ✍️ License
 
 MIT — use freely with attribution
