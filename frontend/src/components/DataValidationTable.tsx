@@ -14,6 +14,7 @@ import {
 import { validators } from "../utils/validationRules";
 import type { PreviewRow } from "../types";
 import Loader from "./Loader";
+import { TablePagination } from "@mui/material";
 
 type Props = {
   data: PreviewRow[];
@@ -34,6 +35,8 @@ export default function DataValidationTable({
 }: Props) {
   const [rows, setRows] = useState<PreviewRow[]>(data);
   const [errors, setErrors] = useState<boolean[][]>([]);
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 10;
 
   useEffect(() => {
     const validationResults = rows.map((row) =>
@@ -91,30 +94,44 @@ export default function DataValidationTable({
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, rowIndex) => (
-            <TableRow key={rowIndex}>
-              {Object.keys(mapping).map((colKey, colIndex) => {
-                const value = row[colKey];
-                const isCellInvalid = errors[rowIndex]?.[colIndex] ?? false;
+          {rows
+            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+            .map((row, visibleRowIndex) => {
+              const rowIndex = page * rowsPerPage + visibleRowIndex;
 
-                return (
-                  <TableCell key={colKey}>
-                    <TextField
-                      value={value}
-                      onChange={(e) =>
-                        handleChange(rowIndex, colKey, e.target.value)
-                      }
-                      error={isCellInvalid}
-                      helperText={isCellInvalid ? "Invalid" : ""}
-                      size="small"
-                      fullWidth
-                    />
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
+              return (
+                <TableRow key={rowIndex}>
+                  {Object.keys(mapping).map((colKey, colIndex) => {
+                    const value = row[colKey];
+                    const isCellInvalid = errors[rowIndex]?.[colIndex] ?? false;
+
+                    return (
+                      <TableCell key={colKey}>
+                        <TextField
+                          value={value}
+                          onChange={(e) =>
+                            handleChange(rowIndex, colKey, e.target.value)
+                          }
+                          error={isCellInvalid}
+                          helperText={isCellInvalid ? "Invalid" : ""}
+                          size="small"
+                          fullWidth
+                        />
+                      </TableCell>
+                    );
+                  })}
+                </TableRow>
+              );
+            })}
         </TableBody>
+        <TablePagination
+          component="div"
+          count={rows.length}
+          page={page}
+          onPageChange={(_, newPage) => setPage(newPage)}
+          rowsPerPage={rowsPerPage}
+          rowsPerPageOptions={[10]}
+        />
       </Table>
 
       <Button
