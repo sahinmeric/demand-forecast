@@ -15,6 +15,7 @@ import { validators } from "../utils/validationRules";
 import type { PreviewRow } from "../types";
 import Loader from "./Loader";
 import { TablePagination } from "@mui/material";
+import { FIELD_LABELS } from "../constant/constant";
 
 type Props = {
   data: PreviewRow[];
@@ -88,7 +89,12 @@ export default function DataValidationTable({
           <TableRow>
             {Object.keys(mapping).map((col) => (
               <TableCell key={col}>
-                {col} → {mapping[col]}
+                <Typography variant="caption" color="text.secondary">
+                  {col}
+                </Typography>
+                <Typography variant="body2" fontWeight="bold">
+                  {FIELD_LABELS[mapping[col]] ?? mapping[col]}
+                </Typography>
               </TableCell>
             ))}
           </TableRow>
