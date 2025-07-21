@@ -15,7 +15,15 @@ const PageLayout = ({
   loading = false,
   loadingMessage,
 }: Props) => (
-  <Container maxWidth="lg" sx={{ py: 4 }}>
+  <Container
+    maxWidth="lg"
+    sx={{
+      py: 4,
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    }}
+  >
     <Typography variant="h4" component="h1" gutterBottom>
       {title}
     </Typography>
