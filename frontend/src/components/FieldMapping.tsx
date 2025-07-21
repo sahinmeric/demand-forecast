@@ -16,20 +16,12 @@ import {
 import { useState, useEffect } from "react";
 import type { PreviewRow } from "../types";
 import Loader from "./Loader";
+import { FIELD_LABELS, REQUIRED_FIELDS } from "../constant/constant";
 
 type Props = {
   preview: PreviewRow[];
   onMappingComplete: (mapping: Record<string, string>) => void;
 };
-
-const REQUIRED_FIELDS = [
-  "sku",
-  "fecha",
-  "cantidad_vendida",
-  "precio",
-  "promocion_activa",
-  "categoria",
-];
 
 export default function FieldMapping({ preview, onMappingComplete }: Props) {
   const [columns, setColumns] = useState<string[]>([]);
@@ -55,7 +47,11 @@ export default function FieldMapping({ preview, onMappingComplete }: Props) {
     );
 
     if (missing.length > 0) {
-      setError(`Missing required mappings: ${missing.join(", ")}`);
+      setError(
+        `Missing required mappings: ${missing
+          .map((f) => FIELD_LABELS[f])
+          .join(", ")}`
+      );
       setLoading(false);
       return;
     }
@@ -84,13 +80,16 @@ export default function FieldMapping({ preview, onMappingComplete }: Props) {
       <Typography variant="h6" gutterBottom>
         Step 2: Map Your Columns
       </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        Columns not mapped will be <strong>discarded</strong>. Make sure all
+        required fields are mapped correctly.
+      </Typography>
 
       <Table size="small">
         <TableHead>
           <TableRow>
             {columns.map((col) => (
               <TableCell key={col}>
-                <Typography fontWeight="bold">{col}</Typography>
                 <FormControl fullWidth margin="dense" size="small">
                   <InputLabel>Map to</InputLabel>
                   <Select
@@ -103,10 +102,11 @@ export default function FieldMapping({ preview, onMappingComplete }: Props) {
                     </MenuItem>
                     {REQUIRED_FIELDS.map((field) => (
                       <MenuItem key={field} value={field}>
-                        {field}
+                        {FIELD_LABELS[field]}
                       </MenuItem>
                     ))}
                   </Select>
+                  <Typography fontWeight="bold">{col}</Typography>
                 </FormControl>
               </TableCell>
             ))}
